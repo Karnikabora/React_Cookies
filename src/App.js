@@ -1,24 +1,28 @@
-import logo from './logo.svg';
+import React, {useEffect} from 'react';
+import {useCookies} from 'react-cookie';
 import './App.css';
 
 function App() {
+  const [cookie, setCookie] = useCookies(['user']);
+
+  useEffect(() => {
+    const fetchdata = async() =>{
+      const response = await fetch('https://randomuser.me/api/');
+      const data = await response.json();
+      const maindata = data.results;
+      console.log(maindata[0].email);
+      setCookie('Email', maindata[0].email,{path:'/'})
+    }
+    fetchdata()
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+    Hello I am learning React Cookies
+    {
+      cookie.Email && <p>{cookie.Email}</p>
+    }
+    </>
   );
 }
 
